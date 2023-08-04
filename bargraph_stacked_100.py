@@ -1,3 +1,5 @@
+#! /bin/python
+
 # libraries
 import pandas as pd
 import numpy as np
@@ -289,7 +291,7 @@ for n, x in enumerate([*cross_tab.index.values]):
                  fontweight='bold')
 
 plt.tight_layout()
-# plt.show()
+plt.show()
 
 
 
