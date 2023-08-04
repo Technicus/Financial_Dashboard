@@ -57,8 +57,14 @@ def create_plot(data):
 
     # for n, x in enumerate([*cross_tab.index.values]):
     for n, x in enumerate([*cross_tab_prop.index.values]):
+        print('n: {}'.format(n))
+        print('x: {}'.format(x))
         for (proportion, y_loc) in zip(cross_tab_prop.loc[x],
                                        cross_tab_prop.loc[x].cumsum()):
+            print('cross_tab_prop: {}'.format(cross_tab_prop))
+            print('proportion: {}'.format(proportion))
+            print('y_loc: {}'.format(y_loc))
+
             plt.text(x=n - 0.17,
                      y=(y_loc - proportion) + (proportion / 2 ), # Position of percentag
                      # y=(y_loc- proportion) + (proportion - 30 ),
