@@ -238,12 +238,12 @@ print(data_sandbox_quantities)
 print('---------------')
 
 
-def create_plot(data):
+def create_plot(data_percentage, data_quantities):
     # cross_tab_prop = pd.crosstab(index=data['release_year'],
     # cross_tab_prop = pd.crosstab(index=data['Budget'],
     #                              columns=data[['Income', 'Reserve']],
     #                              normalize='index')
-    cross_tab_prop = data
+    cross_tab_prop = data_percentage
     cross_tab_prop.index.name = None
     cross_tab_prop.plot(kind='bar',
                         stacked=True,
@@ -270,7 +270,8 @@ def create_plot(data):
     plt.xticks(rotation=0, ha='right')
     plt.tight_layout()
     return plt
-plt = create_plot(data_sandbox_proportions)
+
+plt = create_plot(data_sandbox_proportions, data_sandbox_quantities)
 # data_sandbox_budget.rename('Budget', inplace=True)
 # plt = create_plot(data_sandbox_budget)
 plt.show()

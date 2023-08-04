@@ -1,0 +1,35 @@
+---------------
+data_sandbox_budget:
+              Budget_Desired Budget_Actual  Income  Spending Reserve
+Needs                     50            30  5000.0    2985.0  2015.0
+Savings                   20             7  2000.0     700.0  1300.0
+Discretionary             30             2  3000.0     220.0  2780.0
+Total                    100            39   10000    3905.0  6095.0
+---------------
+data_sandbox_values:
+              Budget_Desired Budget_Actual    Income     Spending   Reserve  Proportion
+Needs                     50            30    5000.0  2985.000000    2015.0        7015
+Savings                   20             7    2000.0   700.000000    1300.0        3300
+Discretionary             30             2    3000.0   220.000000    2780.0        5780
+Total                    100            39     10000  3905.000000    6095.0       16095
+Proportion          0.006213      0.002423  0.621311     0.242622  0.378689           1
+---------------
+data_sandbox_proportions_intermediate:
+                 Income   Reserve  Proportion
+Needs          0.712758  0.287242        7015
+Savings        0.606061  0.393939        3300
+Discretionary  0.519031  0.480969        5780
+Proportion     0.621311  0.378689           1
+---------------
+data_sandbox_proportions:
+                 Income   Reserve
+Needs          0.712758  0.287242
+Savings        0.606061  0.393939
+Discretionary  0.519031  0.480969
+---------------
+data_sandbox_quantities:
+               Income Reserve
+Needs          5000.0  2015.0
+Savings        2000.0  1300.0
+Discretionary  3000.0  2780.0
+---------------
