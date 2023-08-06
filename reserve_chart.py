@@ -99,11 +99,11 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
     plt.legend(
         bbox_to_anchor=(0., 1.02, 1., .102),
         loc='lower center',
-        ncol=2, borderaxespad=0, title = 'Cashflow Dashboard',
+        ncol=2, borderaxespad=0, title = 'Monetary Gauage',
         title_fontsize = 'xx-large',
         frameon = False)
 
-    # return fig
+    return fig, ax
 
 
 index = data_budget_quantities.index.values
@@ -119,8 +119,8 @@ print(income)
 print('reserve:')
 print(reserve)
 
-reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = True)
-reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = False)
+# fig, ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = True)
+fig, ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = False)
 
-plt.show()
+# plt.show()
 

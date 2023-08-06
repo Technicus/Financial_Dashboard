@@ -6,8 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
-# kate
+# dev par
 *.kate-swp
+data/data.csv
+data/budget.ods
+data/*.ods#
 
 # Distribution / packaging
 .Python
