@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 
+
 print('---------------')
 print('[ data_sandbox ]')
 print('---------------')
@@ -207,37 +208,37 @@ print('data_sandbox_values:')
 print(data_sandbox_values)
 print('---------------')
 
-data_sandbox_proportions_intermediate = data_sandbox_budget.drop(['Budget_Desired', 'Budget_Actual', 'Spending'], axis=1)
-data_sandbox_proportions_intermediate = data_sandbox_proportions_intermediate.drop(['Total'], axis=0)
+data_budget_proportions_intermediate = data_sandbox_budget.drop(['Budget_Desired', 'Budget_Actual', 'Spending'], axis=1)
+data_budget_proportions_intermediate = data_budget_proportions_intermediate.drop(['Total'], axis=0)
 
-data_sandbox_proportions_intermediate.at['Needs','Income'] = data_sandbox_proportions_intermediate.loc['Needs']['Income']/data_sandbox_proportions_intermediate.loc['Needs']['Proportion']
-data_sandbox_proportions_intermediate.at['Savings','Income'] = data_sandbox_proportions_intermediate.loc['Savings']['Income']/data_sandbox_proportions_intermediate.loc['Savings']['Proportion']
-data_sandbox_proportions_intermediate.at['Discretionary','Income'] = data_sandbox_proportions_intermediate.loc['Discretionary']['Income']/data_sandbox_proportions_intermediate.loc['Discretionary']['Proportion']
+data_budget_proportions_intermediate.at['Needs','Income'] = data_budget_proportions_intermediate.loc['Needs']['Income']/data_budget_proportions_intermediate.loc['Needs']['Proportion']
+data_budget_proportions_intermediate.at['Savings','Income'] = data_budget_proportions_intermediate.loc['Savings']['Income']/data_budget_proportions_intermediate.loc['Savings']['Proportion']
+data_budget_proportions_intermediate.at['Discretionary','Income'] = data_budget_proportions_intermediate.loc['Discretionary']['Income']/data_budget_proportions_intermediate.loc['Discretionary']['Proportion']
 
-data_sandbox_proportions_intermediate.at['Needs','Reserve'] = data_sandbox_proportions_intermediate.loc['Needs']['Reserve']/data_sandbox_proportions_intermediate.loc['Needs']['Proportion']
-data_sandbox_proportions_intermediate.at['Savings','Reserve'] = data_sandbox_proportions_intermediate.loc['Savings']['Reserve']/data_sandbox_proportions_intermediate.loc['Savings']['Proportion']
-data_sandbox_proportions_intermediate.at['Discretionary','Reserve'] = data_sandbox_proportions_intermediate.loc['Discretionary']['Reserve']/data_sandbox_proportions_intermediate.loc['Discretionary']['Proportion']
+data_budget_proportions_intermediate.at['Needs','Reserve'] = data_budget_proportions_intermediate.loc['Needs']['Reserve']/data_budget_proportions_intermediate.loc['Needs']['Proportion']
+data_budget_proportions_intermediate.at['Savings','Reserve'] = data_budget_proportions_intermediate.loc['Savings']['Reserve']/data_budget_proportions_intermediate.loc['Savings']['Proportion']
+data_budget_proportions_intermediate.at['Discretionary','Reserve'] = data_budget_proportions_intermediate.loc['Discretionary']['Reserve']/data_budget_proportions_intermediate.loc['Discretionary']['Proportion']
 
-print('data_sandbox_proportions_intermediate:')
-print(data_sandbox_proportions_intermediate)
+print('data_budget_proportions_intermediate:')
+print(data_budget_proportions_intermediate)
 print('---------------')
 
-data_sandbox_proportions = data_sandbox_proportions_intermediate.drop(['Proportion'], axis=1)
-data_sandbox_proportions = data_sandbox_proportions.drop(['Proportion'], axis=0)
-data_sandbox_proportions.rename(columns={"Income": "Income_Proportion", "Reserve": "Reserve_Proportion"}, inplace = True)
-print('data_sandbox_proportions:')
-print(data_sandbox_proportions)
+data_budget_proportions = data_budget_proportions_intermediate.drop(['Proportion'], axis=1)
+data_budget_proportions = data_budget_proportions.drop(['Proportion'], axis=0)
+data_budget_proportions.rename(columns={"Income": "Income_Proportion", "Reserve": "Reserve_Proportion"}, inplace = True)
+print('data_budget_proportions:')
+print(data_budget_proportions)
 print('---------------')
 
-data_sandbox_quantities = data_sandbox_budget.drop(['Budget_Desired', 'Budget_Actual', 'Spending', 'Proportion'], axis=1)
-data_sandbox_quantities = data_sandbox_quantities.drop(['Total', 'Proportion'], axis=0)
-print('data_sandbox_quantities:')
-print(data_sandbox_quantities)
-print(type(data_sandbox_quantities))
+data_budget_quantities = data_sandbox_budget.drop(['Budget_Desired', 'Budget_Actual', 'Spending', 'Proportion'], axis=1)
+data_budget_quantities = data_budget_quantities.drop(['Total', 'Proportion'], axis=0)
+print('data_budget_quantities:')
+print(data_budget_quantities)
+print(type(data_budget_quantities))
 print('---------------')
 
-frames = [data_sandbox_quantities, data_sandbox_proportions]
-data_sandbox_quantities_proportions = pd.concat(frames, axis=1)
-print('data_sandbox_quantities_proportions:')
-print(data_sandbox_quantities_proportions)
+frames = [data_budget_quantities, data_budget_proportions]
+data_budget_quantities_proportions = pd.concat(frames, axis=1)
+print('data_budget_quantities_proportions:')
+print(data_budget_quantities_proportions)
 print('---------------')

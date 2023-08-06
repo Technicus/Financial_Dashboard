@@ -5,21 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.ticker as mtick
-import parse_data_income_expense
+from data_income_expense import data_budget_quantities, data_budget_proportions, data_budget_quantities_proportions
 import itertools
 
-index = parse_data_income_expense.data_sandbox_quantities.index.values
-income = {'quantities': pd.Series(parse_data_income_expense.data_sandbox_quantities['Income']).tolist(),
-          'proportions': pd.Series(parse_data_income_expense.data_sandbox_proportions['Income_Proportion']).tolist()}
-reserve = {'quantities': pd.Series(parse_data_income_expense.data_sandbox_quantities['Reserve']).tolist(),
-          'proportions': pd.Series(parse_data_income_expense.data_sandbox_proportions['Reserve_Proportion']).tolist()}
-print('\n----')
-print('index:')
-print(index)
-print('income:')
-print(income)
-print('reserve:')
-print(reserve)
 
 def reserve_chart(chart_data = None, invert = False, sort = None):
 
@@ -40,20 +28,20 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
                 )
 
     if sort != None:
-        chart_data = chart_data.reindex(sort)ng=False, inplace = True)
+        chart_data = chart_data.reindex(sort)
 
     if invert:
-        index = chart_data.index.values
-        reserve = {'quantities': pd.Series(chart_data['Income']).tolist(),
-                  'proportions': pd.Series(chart_data['Income_Proportion']).tolist()}
-        income = {'quantities': pd.Series(chart_data['Reserve']).tolist(),
-                   'proportions': pd.Series(chart_data['Reserve_Proportion']).tolist()}
-    else:
         index = chart_data.index.values
         income = {'quantities': pd.Series(chart_data['Income']).tolist(),
                   'proportions': pd.Series(chart_data['Income_Proportion']).tolist()}
         reserve = {'quantities': pd.Series(chart_data['Reserve']).tolist(),
                    'proportions': pd.Series(chart_data['Reserve_Proportion']).tolist()}
+    else:
+        index = chart_data.index.values
+        income = {'quantities': pd.Series(chart_data['Reserve']).tolist(),
+                   'proportions': pd.Series(chart_data['Reserve_Proportion']).tolist()}
+        reserve = {'quantities': pd.Series(chart_data['Income']).tolist(),
+                  'proportions': pd.Series(chart_data['Income_Proportion']).tolist()}
 
     width = 0.5
     # x_income  = [x - width for x in range(len(index))]
@@ -64,14 +52,13 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
     fig, ax = plt.subplots()
 
     if invert:
-        bar_reserve = ax.bar(x_income,  income['proportions'],  width, label = 'income',  color = 'palegreen')
-        bar_income  = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'], color = 'lightgrey')
+        bar_reserve = ax.bar(x_income,  reserve['proportions'],  width, label = 'income',  color = 'lightgrey')
+        bar_income  = ax.bar(x_reserve, income['proportions'], width, label = 'reserve', bottom = reserve['proportions'], color = 'palegreen')
     else:
         bar_income  = ax.bar(x_income,  income['proportions'],  width, label = 'income',  color = 'palegreen')
         bar_reserve = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'], color = 'lightgrey')
 
     # ax.plot(index, [0, 0, 0])
-
     ax.set_title('')
     ax.set_ylabel('')
     ax.set_xlabel('')
@@ -94,22 +81,13 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
     for x in range(len(index)):
         autolabel_offset.append(0)
         print(autolabel_offset)
-    # autolabel(bar_income, income['quantities'], [0,0,0,0])
-    # if invert:
-    #     autolabel(bar_reserve, income['quantities'], autolabel_offset)
-    #     autolabel(bar_income, reserve['quantities'], income['proportions'],)
-    # else:
-    #     autolabel(bar_income, income['quantities'], autolabel_offset)
-    #     autolabel(bar_reserve, reserve['quantities'], income['proportions'],)
+
     if invert:
         autolabel(bar_reserve, reserve['quantities'], autolabel_offset)
-        autolabel(bar_income, income['quantities'], income['proportions'])
+        autolabel(bar_income, income['quantities'], reserve['proportions'])
     else:
         autolabel(bar_income, income['quantities'], autolabel_offset)
         autolabel(bar_reserve, reserve['quantities'], income['proportions'],)
-        # autolabel(bar_reserve, reserve['quantities'], reserve['proportions'],)
-    # autolabel(bar_reserve, reserve['quantities'], [0,0,0],)
-    # autolabel(bar_income, income['quantities'], income['proportions'])
 
     plt.yticks(range(0, 1))
     plt.yticks([0, 0.25, 0.50, 0.75, 1.00])
@@ -125,14 +103,24 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
         title_fontsize = 'xx-large',
         frameon = False)
 
-    # plt.show()
     # return fig
 
 
-# reserve_chart()
+index = data_budget_quantities.index.values
+income = {'quantities': pd.Series(data_budget_quantities['Income']).tolist(),
+          'proportions': pd.Series(data_budget_proportions['Income_Proportion']).tolist()}
+reserve = {'quantities': pd.Series(data_budget_quantities['Reserve']).tolist(),
+          'proportions': pd.Series(data_budget_proportions['Reserve_Proportion']).tolist()}
+print('\n----')
+print('index:')
+print(index)
+print('income:')
+print(income)
+print('reserve:')
+print(reserve)
 
-reserve_chart(parse_data_income_expense.data_sandbox_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'])
-# reserve_chart(parse_data_income_expense.data_sandbox_quantities_proportions, sort = ['Needs', 'Savings', 'Discretionary'])
+reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = True)
+reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = False)
 
 plt.show()
 
