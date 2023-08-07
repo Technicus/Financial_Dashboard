@@ -5,14 +5,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.ticker as mtick
+from matplotlib.container import BarContainer
 from data_income_expense import data_budget_quantities, data_budget_proportions, data_budget_quantities_proportions
 import itertools
 
 
-def reserve_chart(chart_data = None, invert = False, sort = None):
+def reserve_chart(chart_data = None, invert_bars = False, invert_colors = False, sort = None):
 
     def autolabel(bar_group, labels, height_offset):
         for (bar, label, height_offset) in zip(bar_group, labels, height_offset):
+            print('bar: {}, label: {}, height_offset: {}'.format(bar, label, height_offset))
             height = bar.get_height()
 
             ax.annotate(
@@ -21,6 +23,7 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
                 fontweight='bold',
                 # color='yellow',
                 xy = ((bar.get_x() + bar.get_width() / 2, height + height_offset - 0.04)),
+                # xy = ((bar.get_x() + bar.get_width() / 2, height)),
                 ha = 'center',
                 xytext = (0, 3),
                 textcoords = 'offset points',
@@ -30,33 +33,68 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
     if sort != None:
         chart_data = chart_data.reindex(sort)
 
-    if invert:
-        index = chart_data.index.values
+    index = chart_data.index.values
+    x_income  = [x for x in range(len(index))]
+    x_reserve = [x for x in range(len(index))]
+    width = 0.5
+    if invert_bars:
         income = {'quantities': pd.Series(chart_data['Income']).tolist(),
                   'proportions': pd.Series(chart_data['Income_Proportion']).tolist()}
         reserve = {'quantities': pd.Series(chart_data['Reserve']).tolist(),
                    'proportions': pd.Series(chart_data['Reserve_Proportion']).tolist()}
+        fig, ax = plt.subplots()
+        bar_reserve = ax.bar(x_income,  income['proportions'],  width, label = 'income')
+        bar_income  = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'])
     else:
-        index = chart_data.index.values
+        # index = chart_data.index.values
         income = {'quantities': pd.Series(chart_data['Reserve']).tolist(),
                    'proportions': pd.Series(chart_data['Reserve_Proportion']).tolist()}
         reserve = {'quantities': pd.Series(chart_data['Income']).tolist(),
                   'proportions': pd.Series(chart_data['Income_Proportion']).tolist()}
+        fig, ax = plt.subplots()
+        bar_reserve = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'])
+        bar_income  = ax.bar(x_income,  income['proportions'],  width, label = 'income')
 
-    width = 0.5
+    # width = 0.5
     # x_income  = [x - width for x in range(len(index))]
-    x_income  = [x for x in range(len(index))]
-    x_reserve = [x for x in range(len(index))]
 
     # ytickformat('$%,.0f')
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
+    #
+    # if invert_bars:
+    #     bar_reserve = ax.bar(x_income,  reserve['proportions'],  width, label = 'income')
+    #     bar_income  = ax.bar(x_reserve, income['proportions'], width, label = 'reserve', bottom = reserve['proportions'])
+    # else:
+    #     bar_reserve = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'])
+    #     bar_income  = ax.bar(x_income,  income['proportions'],  width, label = 'income')
 
-    if invert:
-        bar_reserve = ax.bar(x_income,  reserve['proportions'],  width, label = 'income',  color = 'lightgrey')
-        bar_income  = ax.bar(x_reserve, income['proportions'], width, label = 'reserve', bottom = reserve['proportions'], color = 'palegreen')
+    # print(dir(bar_reserve))
+    # print(type(bar_reserve))
+    # print(bar_reserve.get_children())
+    # for item in bar_reserve.get_children():
+    #    print(item)
+    #    print(type(item))
+    #    print(dir(item))
+    #    item.set_color('red')
+
+    if invert_colors:
+        for item in bar_reserve.get_children():
+            item.set_color('palegreen')
+        for item in bar_income.get_children():
+            item.set_color('lightgrey')
+        # bar_reserve.set_color('palegreen')
+        # bar_reserve.bar.color = 'palegreen'
+        # bar_income.bar.color = 'lightgrey'
+        # bar_income.set_color('lightgrey')
     else:
-        bar_income  = ax.bar(x_income,  income['proportions'],  width, label = 'income',  color = 'palegreen')
-        bar_reserve = ax.bar(x_reserve, reserve['proportions'], width, label = 'reserve', bottom = income['proportions'], color = 'lightgrey')
+        for item in bar_reserve.get_children():
+            item.set_color('lightgrey')
+        for item in bar_income.get_children():
+            item.set_color('palegreen')
+        # bar_reserve.bar.color = 'lightgrey'
+        # bar_income.bar.color = 'palegreen'
+        # bar_reserve.set_color('lightgrey')
+        # bar_income.set_color('palegreen')
 
     # ax.plot(index, [0, 0, 0])
     ax.set_title('')
@@ -73,21 +111,44 @@ def reserve_chart(chart_data = None, invert = False, sort = None):
     # ax.bar_label('p', label_type='center')
 
     # autolabel(bar_income, income['quantities'], income['proportions'],)
-    print('autolabel_offset:')
-    autolabel_offset = []
-    print(type(autolabel_offset))
-    print(autolabel_offset)
-    # for entry in index:
-    for x in range(len(index)):
-        autolabel_offset.append(0)
-        print(autolabel_offset)
-
-    if invert:
-        autolabel(bar_reserve, reserve['quantities'], autolabel_offset)
-        autolabel(bar_income, income['quantities'], reserve['proportions'])
+    # print('autolabel_offset:')
+    # autolabel_offset = []
+    # print(type(autolabel_offset))
+    # print(autolabel_offset)
+    # # for entry in index:
+    # # for x in range(len(index)):
+    # #     autolabel_offset.append(0)
+    #     print(autolabel_offset)
+    # print(autolabel_offset)
+    print(dir(bar_reserve))
+    print(dir(bar_reserve.get_children))
+    print(bar_reserve.get_children)
+    # bars = [i for i in bar_reserve.get_children() if isinstance(i, BarContainer)]
+    bar_height = []
+    for item in bar_reserve.get_children():
+            bar_height.append(item.get_height())
+    print(bar_height)
+    if invert_bars:
+        autolabel_offset = []
+        for item in bar_reserve.get_children():
+            autolabel_offset.append(item.get_height())
+        #     autolabel_offset.append(0)
+        #     autolabel_offset.append(bar_reserve.get_height())
+            # autolabel_offset = bar_reserve.get_height()
+        autolabel(bar_income, reserve['quantities'], height_offset = autolabel_offset) #), height_offset = autolabel_offset)
+        for item in range(len(autolabel_offset)):
+            autolabel_offset[item] = 0
+        autolabel(bar_reserve, income['quantities'], height_offset = autolabel_offset)
+        # autolabel(bar_reserve, reserve['quantities'], height_offset = autolabel_offset)
+        # autolabel(bar_income, income['quantities'], reserve['proportions']) #), height_offset = autolabel_offset)
     else:
-        autolabel(bar_income, income['quantities'], autolabel_offset)
-        autolabel(bar_reserve, reserve['quantities'], income['proportions'],)
+        autolabel_offset = []
+        for item in bar_income.get_children():
+            autolabel_offset.append(item.get_height())
+        autolabel(bar_reserve, reserve['quantities'], income['proportions']) #, height_offset = autolabel_offset)
+        for item in range(len(autolabel_offset)):
+            autolabel_offset[item] = 0
+        autolabel(bar_income, income['quantities'], height_offset = [0,0,0])
 
     plt.yticks(range(0, 1))
     plt.yticks([0, 0.25, 0.50, 0.75, 1.00])
@@ -119,8 +180,17 @@ print(income)
 print('reserve:')
 print(reserve)
 
-# fig, ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = True)
-fig, ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert = False)
+# fig, ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = True)
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = True)
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = False, invert_colors = False)
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = False, invert_colors = True)
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = True, invert_colors = False)
+
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = True, invert_colors = True)
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = True, invert_colors = False)
+
+# reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = False, invert_colors = True)
+reserve_fig, reserve_ax = reserve_chart(data_budget_quantities_proportions, sort = ['Needs', 'Discretionary', 'Savings'], invert_bars = False, invert_colors = False)
 
 # plt.show()
 

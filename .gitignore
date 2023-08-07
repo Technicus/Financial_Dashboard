@@ -11,7 +11,7 @@ __pycache__/
 data/data.csv
 data/budget.ods
 data/*.ods#
-
+*~lock.*
 # Distribution / packaging
 .Python
 build/
